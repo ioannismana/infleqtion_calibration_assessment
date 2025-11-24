@@ -1,0 +1,16 @@
+[project]
+name = "infleqtion_assessment_calibration"
+version = "0.1.0"
+description = "A server to simulate working with hardware which requires calibration."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "fastapi[standard]>=0.115.12",
+    "numpy>=2.0.2",
+    "pyside6>=6.8.2.1",
+    "pytest>=8.4.1",
+    "requests>=2.32.3",
+    "scipy>=1.13.1",
+    "seaborn>=0.13.2",
+]
+

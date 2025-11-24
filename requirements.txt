@@ -1,0 +1,7 @@
+fastapi[standard]
+numpy
+pyside6
+requests
+scipy
+seaborn
+pytest
