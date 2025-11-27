@@ -41,7 +41,7 @@ class CalibrationEngine:
     """
     Main calibration engine.
     
-    Coordinates the entire calibration process:
+    Performs calibration process:
     1. Uses search strategy to collect measurements
     2. Fits Gaussian curve to data
     3. Determines optimal angle
@@ -76,47 +76,48 @@ class CalibrationEngine:
         Raises:
             RuntimeError: If calibration fails
         """
-        print("STARTING CALIBRATION")
+        print("Starting calibration ...")
         
-        # Step 1: Check server connectivity
-        print("\nStep 1: Checking server connectivity...")
-        if not self.client.check_status():
-            raise RuntimeError("Server is not responding. Please ensure server.py is running.")
-        print("  ✓ Server is up and running")
+        # Check server connectivity
+        print("\nCheck server connectivity...")
+        server_up: bool = self.client.check_status()
+        if not server_up:
+            raise RuntimeError("* Server is not responding")
+        print("Server is running")
         
-        # Step 2: Execute search strategy to collect measurements
-        print("\nStep 2: Executing search strategy...")
+        # Execute search strategy to collect measurements
+        print("\nExecute search strategy...")
         self.client.reset_count()
         search_result = self.strategy.search(self.client)
-        print(f"  ✓ Search complete: {search_result.total_measurements} measurements taken")
+        print(f"Search complete: {search_result.total_measurements} measurements taken")
         
-        # Step 3: Convert to numpy arrays for fitting
+        # Convert to numpy arrays for fitting
         angles = np.array(search_result.angles)
         measurements = np.array(search_result.measurements)
         
         # Step 4: Fit Gaussian curve to the data
-        print("\nStep 3: Fitting Gaussian curve to data...")
+        print("\nFit Gaussian curve to data...")
         try:
             fitted_params = self.fitter.fit(angles, measurements)
-            print(f"  ✓ Curve fitting successful")
-            print(f"    {fitted_params}")
+            print(f"Curve fitting successful")
+            print(f"{fitted_params}")
         except Exception as e:
-            raise RuntimeError(f"Curve fitting failed: {e}")
+            raise RuntimeError(f"* Curve fitting failed: {e}")
         
-        # Step 5: Determine optimal angle from fitted curve
-        print("\nStep 4: Determining optimal angle...")
+        # Determine optimal angle from fitted curve
+        print("\nDetermining optimal angle...")
         optimal_angle = self.fitter.find_peak(fitted_params)
-        print(f"  ✓ Optimal angle: {optimal_angle:.1f}°")
+        print(f"Optimal angle: {optimal_angle:.1f}°")
         
-        # Step 6: Take actual measurement at optimal angle for verification
+        # Take actual measurement at optimal angle for verification
         print("\nStep 5: Verifying optimal angle...")
         measured_voltage = self.client.measure(optimal_angle)
         expected_voltage = self.fitter.predict(optimal_angle, fitted_params)
-        print(f"  ✓ Measured voltage: {measured_voltage:.2f}")
-        print(f"  ✓ Expected voltage: {expected_voltage:.2f}")
-        print(f"  ✓ Difference: {abs(measured_voltage - expected_voltage):.2f}")
+        print(f"Measured voltage: {measured_voltage:.2f}")
+        print(f"Expected voltage: {expected_voltage:.2f}")
+        print(f"Difference: {abs(measured_voltage - expected_voltage):.2f}")
         
-        # Step 7: Create result object
+        # Create result object
         total_measurements = self.client.total_measurements
         
         result = CalibrationResult(
@@ -129,10 +130,7 @@ class CalibrationEngine:
             fitted_params=fitted_params,
             search_result=search_result
         )
-        
-        print("\n" + "=" * 70)
-        print("CALIBRATION COMPLETE")
-        print("=" * 70)
+        print("CALIBRATION DONE\n")
         
         return result
     
