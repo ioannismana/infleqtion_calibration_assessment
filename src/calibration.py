@@ -80,7 +80,7 @@ class CalibrationEngine:
         
         # Check server connectivity
         print("\nCheck server connectivity...")
-        server_up: bool = self.client.check_status()
+        server_up: bool = self.client.check_server_status()
         if not server_up:
             raise RuntimeError("* Server is not responding")
         print("Server is running")

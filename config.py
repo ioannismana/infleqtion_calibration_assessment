@@ -19,8 +19,8 @@ class Config:
     ANGLE_PRECISION: float = 0.1  # Required precision (tenths of a degree)
     
     # Search strategy parameters
-    COARSE_SCAN_STEP: float = 15.0  # Initial wide scan step size
-    MEDIUM_SCAN_STEP: float = 5.0   # Medium resolution scan
+    COARSE_SCAN_STEP: float = 20.0  # Initial wide scan step size
+    MEDIUM_SCAN_STEP: float = 4.0   # Medium resolution scan
     FINE_SCAN_STEP: float = 1.0     # Fine scan around peak
     REFINEMENT_STEP: float = 0.1    # Final refinement step
     

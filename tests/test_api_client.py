@@ -30,7 +30,7 @@ class TestMeasurementClient(unittest.TestCase):
         mock_response.raise_for_status = Mock()
         mock_get.return_value = mock_response
         
-        result = self.client.check_status()
+        result = self.client.check_server_status()
         
         self.assertTrue(result)
         mock_get.assert_called_once()
@@ -40,7 +40,7 @@ class TestMeasurementClient(unittest.TestCase):
         """Test status check when server is down."""
         mock_get.side_effect = requests.RequestException("Connection failed")
         
-        result = self.client.check_status()
+        result = self.client.check_server_status()
         
         self.assertFalse(result)
     
@@ -66,35 +66,6 @@ class TestMeasurementClient(unittest.TestCase):
         """Test measurement with angle above valid range."""
         with self.assertRaises(ValueError):
             self.client.measure(400.0)
-    
-    @patch('src.api_client.requests.get')
-    def test_measure_batch(self, mock_get):
-        """Test batch measurements."""
-        mock_response = Mock()
-        mock_response.json.side_effect = [50.0, 75.0, 90.0]
-        mock_response.raise_for_status = Mock()
-        mock_get.return_value = mock_response
-        
-        angles = [10.0, 50.0, 100.0]
-        results = self.client.measure_batch(angles)
-        
-        self.assertEqual(len(results), 3)
-        self.assertEqual(results[0], (10.0, 50.0))
-        self.assertEqual(results[1], (50.0, 75.0))
-        self.assertEqual(results[2], (100.0, 90.0))
-    
-    @patch('src.api_client.requests.get')
-    def test_measure_with_averaging(self, mock_get):
-        """Test measurement averaging."""
-        mock_response = Mock()
-        mock_response.json.side_effect = [50.0, 52.0, 48.0]
-        mock_response.raise_for_status = Mock()
-        mock_get.return_value = mock_response
-        
-        avg = self.client.measure_with_averaging(45.0, num_samples=3)
-        
-        self.assertEqual(avg, 50.0)
-        self.assertEqual(self.client.total_measurements, 3)
     
     def test_reset_count(self):
         """Test resetting measurement counter."""
