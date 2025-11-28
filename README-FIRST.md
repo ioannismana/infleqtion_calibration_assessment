@@ -6,16 +6,6 @@ A Python-based calibration system that determines the optimal input angle for a 
 
 This system uses a **wide-to-narrow search strategy** combined with **Gaussian curve fitting** to efficiently and reliably find the optimal angle for a measurement device. The solution is designed to be modular, maintainable, and production-ready.
 
-## Features
-
-- ✅ Efficient multi-phase search strategy (wide → fine → refinement)
-- ✅ Robust Gaussian curve fitting using scipy
-- ✅ Clean, modular architecture with clear separation of concerns
-- ✅ Comprehensive unit tests for all components
-- ✅ Detailed visualization of results with fitted curve
-- ✅ Configurable parameters via centralized config
-- ✅ Error handling and validation
-- ✅ Type hints throughout for better code quality
 
 ## Project Structure
 
