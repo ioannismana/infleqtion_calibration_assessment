@@ -7,7 +7,7 @@ from src.api_client import MeasurementClient
 from src.calibration import CalibrationEngine, CalibrationResult
 from src.search_strategy import CoarseToFineSearch
 from src.curve_fitting import GaussianFitter
-from src.scatter_plot import CalibrationPlotter
+from src.scatter_plot import ResultsPlotter
 from config import Config
 
 
@@ -55,7 +55,7 @@ def main() -> int:
         
         # Generate visualization
         print("\nGenerating visualization ...")
-        plotter = CalibrationPlotter()
+        plotter = ResultsPlotter()
         plotter.plot_results(result, filename=Config.PLOT_FILENAME)
         
         print("\n✓ Calibration completed successfully!")

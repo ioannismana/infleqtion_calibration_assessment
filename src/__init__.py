@@ -12,7 +12,7 @@ from src.api_client import MeasurementClient
 from src.calibration import CalibrationEngine, CalibrationResult
 from src.curve_fitting import GaussianFitter, GaussianParams
 from src.search_strategy import SearchStrategy, CoarseToFineSearch, AdaptiveSearch
-from src.scatter_plot import CalibrationPlotter
+from src.scatter_plot import ResultsPlotter
 
 __all__ = [
     'MeasurementClient',
@@ -23,5 +23,5 @@ __all__ = [
     'SearchStrategy',
     'CoarseToFineSearch',
     'AdaptiveSearch',
-    'CalibrationPlotter',
+    'ResultsPlotter',
 ]

@@ -10,7 +10,7 @@ from typing import Optional
 from config import Config
 
 
-class CalibrationPlotter:
+class ResultsPlotter:
     """Creates plot of calibration results."""
     
     @staticmethod
@@ -49,7 +49,7 @@ class CalibrationPlotter:
         ax.plot(
             curve_angles,
             curve_values,
-            color='red',
+            color='magenta',
             linewidth=2,
             label='Fitted Gaussian Curve',
             zorder=2
@@ -107,7 +107,7 @@ class CalibrationPlotter:
             f'Amplitude: {result.fitted_params.amplitude:.2f}'
         ])
         
-        props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
+        props = dict(boxstyle='round', facecolor='wheat', alpha=0.3)
         ax.text(
             0.02, 0.98,
             textstr,
@@ -130,52 +130,3 @@ class CalibrationPlotter:
         else:
             plt.close()
     
-    @staticmethod
-    def plot_search_progression(
-        result,
-        filename: Optional[str] = None,
-        show_plot: bool = False
-    ) -> None:
-        """
-        Create a visualization showing how the search progressed.
-        
-        This shows the order in which measurements were taken, which can
-        be useful for understanding the search strategy.
-        
-        Args:
-            result: CalibrationResult object
-            filename: Output filename (optional)
-            show_plot: If True, display the plot
-        """
-        fig, ax = plt.subplots(figsize=Config.FIGURE_SIZE)
-        
-        # Plot measurements with color gradient showing order
-        scatter = ax.scatter(
-            result.all_angles,
-            result.all_measurements,
-            c=range(len(result.all_angles)),
-            cmap='viridis',
-            s=50,
-            alpha=0.7
-        )
-        
-        # Add colorbar
-        cbar = plt.colorbar(scatter, ax=ax)
-        cbar.set_label('Measurement Order', fontsize=10)
-        
-        # Labels
-        ax.set_xlabel('Angle (degrees)', fontsize=12)
-        ax.set_ylabel('Voltage Response', fontsize=12)
-        ax.set_title('Search Progression', fontsize=14, fontweight='bold')
-        ax.grid(True, alpha=0.3)
-        
-        plt.tight_layout()
-        
-        if filename:
-            plt.savefig(filename, dpi=Config.PLOT_DPI)
-            print(f"✓ Search progression plot saved to: {filename}")
-        
-        if show_plot:
-            plt.show()
-        else:
-            plt.close()
