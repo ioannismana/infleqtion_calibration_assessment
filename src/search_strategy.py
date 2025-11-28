@@ -38,14 +38,14 @@ class SearchStrategy(ABC):
         pass
 
 
-class CoarseToFineSearch(SearchStrategy):
+class WideToNarrowSearch(SearchStrategy):
     """
-    Coarse-to-fine search strategy.
+    Wide-to-narrow search strategy.
     
     This strategy works in multiple phases:
-    1. Coarse scan: Wide spacing across full range to locate general peak area
-    2. Medium scan: Medium spacing around coarse peak
-    3. Fine scan: Fine spacing around medium peak  
+    1. Wide scan: Wide spacing across full range to locate general peak area
+    2. Medium scan: Medium spacing around wide peak
+    3. Narrow scan: Fine spacing around medium peak  
     4. Refinement: Very fine spacing around fine peak
     
     This approach minimizes the total number of measurements while reliably
@@ -53,7 +53,7 @@ class CoarseToFineSearch(SearchStrategy):
     """
     
     def __init__(self):
-        """Initialize the coarse-to-fine search strategy."""
+        """Initialize the wide-to-narrow search strategy."""
         self.angles: List[float] = []
         self.measurements: List[float] = []
     
@@ -104,7 +104,7 @@ class CoarseToFineSearch(SearchStrategy):
     
     def search(self, client) -> SearchResult:
         """
-        Execute the coarse-to-fine search.
+        Execute the wide-to-narrow search.
         
         Args:
             client: MeasurementClient instance
@@ -112,47 +112,34 @@ class CoarseToFineSearch(SearchStrategy):
         Returns:
             SearchResult with all measurements and estimated peak
         """
-        print("Starting coarse-to-fine search...")
+        print("Starting wide-to-narrow search...")
         
-        # Phase 1: Coarse scan across full range
-        print(f"Phase 1: Coarse scan (step size: {Config.COARSE_SCAN_STEP}°)")
-        coarse_results = self._measure_range(
+        # Phase 1: Wide scan across full range
+        print(f"Phase 1: wide scan (step size: {Config.WIDE_SCAN_STEP}°)")
+        wide_results = self._measure_range(
             client,
             Config.MIN_ANGLE,
             Config.MAX_ANGLE,
-            Config.COARSE_SCAN_STEP
+            Config.WIDE_SCAN_STEP
         )
-        coarse_peak = self._find_peak_in_results(coarse_results)
-        print(f"  Coarse peak found near: {coarse_peak:.1f}°")
+        wide_peak = self._find_peak_in_results(wide_results)
+        print(f"  Wide peak found near: {wide_peak:.1f}°")
         
-        # Phase 2: Medium scan around coarse peak
-        print(f"Phase 2: Medium scan (step size: {Config.MEDIUM_SCAN_STEP}°)")
-        medium_start = max(Config.MIN_ANGLE, coarse_peak - Config.MEDIUM_WINDOW / 2)
-        medium_end = min(Config.MAX_ANGLE, coarse_peak + Config.MEDIUM_WINDOW / 2)
-        medium_results = self._measure_range(
+        # Phase 2: Narrow scan around wide peak
+        print(f"Phase 2: Narrow scan (step size: {Config.NARROW_SCAN_STEP}°)")
+        narrow_start = max(Config.MIN_ANGLE, wide_peak - Config.FINE_WINDOW / 2)
+        narrow_end = min(Config.MAX_ANGLE, wide_peak + Config.FINE_WINDOW / 2)
+        narrow_results = self._measure_range(
             client,
-            medium_start,
-            medium_end,
-            Config.MEDIUM_SCAN_STEP
+            narrow_start,
+            narrow_end,
+            Config.NARROW_SCAN_STEP
         )
-        medium_peak = self._find_peak_in_results(medium_results)
-        print(f"  Medium peak found near: {medium_peak:.1f}°")
+        fine_peak = self._find_peak_in_results(narrow_results)
+        print(f"  Narrow peak found near: {fine_peak:.1f}°")
         
-        # Phase 3: Fine scan around medium peak
-        print(f"Phase 3: Fine scan (step size: {Config.FINE_SCAN_STEP}°)")
-        fine_start = max(Config.MIN_ANGLE, medium_peak - Config.FINE_WINDOW / 2)
-        fine_end = min(Config.MAX_ANGLE, medium_peak + Config.FINE_WINDOW / 2)
-        fine_results = self._measure_range(
-            client,
-            fine_start,
-            fine_end,
-            Config.FINE_SCAN_STEP
-        )
-        fine_peak = self._find_peak_in_results(fine_results)
-        print(f"  Fine peak found near: {fine_peak:.1f}°")
-        
-        # Phase 4: Refinement scan for final precision
-        print(f"Phase 4: Refinement scan (step size: {Config.REFINEMENT_STEP}°)")
+        # Phase 3: Refinement scan for final precision
+        print(f"Phase 3: Refinement scan (step size: {Config.REFINEMENT_STEP}°)")
         refine_start = max(Config.MIN_ANGLE, fine_peak - Config.REFINEMENT_WINDOW / 2)
         refine_end = min(Config.MAX_ANGLE, fine_peak + Config.REFINEMENT_WINDOW / 2)
         refine_results = self._measure_range(
@@ -171,34 +158,3 @@ class CoarseToFineSearch(SearchStrategy):
             total_measurements=len(self.angles)
         )
 
-
-class AdaptiveSearch(SearchStrategy):
-    """
-    Adaptive search strategy using golden section search.
-    
-    This is an alternative strategy that adapts based on measurements.
-    It can be more efficient in some cases but may be less robust with noisy data.
-    """
-    
-    def __init__(self):
-        """Initialize the adaptive search strategy."""
-        self.angles: List[float] = []
-        self.measurements: List[float] = []
-    
-    def search(self, client) -> SearchResult:
-        """
-        Execute adaptive search.
-        
-        This is a placeholder for an alternative search strategy.
-        Can be implemented if the coarse-to-fine approach needs improvement.
-        
-        Args:
-            client: MeasurementClient instance
-            
-        Returns:
-            SearchResult
-        """
-        # For now, fall back to coarse-to-fine
-        # This could be implemented as a more sophisticated adaptive algorithm
-        fallback = CoarseToFineSearch()
-        return fallback.search(client)

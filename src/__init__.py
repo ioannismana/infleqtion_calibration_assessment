@@ -11,7 +11,7 @@ This package provides tools for calibrating measurement systems by:
 from src.api_client import MeasurementClient
 from src.calibration import CalibrationEngine, CalibrationResult
 from src.curve_fitting import GaussianFitter, GaussianParams
-from src.search_strategy import SearchStrategy, CoarseToFineSearch, AdaptiveSearch
+from src.search_strategy import SearchStrategy, WideToNarrowSearch
 from src.scatter_plot import ResultsPlotter
 
 __all__ = [
@@ -21,7 +21,6 @@ __all__ = [
     'GaussianFitter',
     'GaussianParams',
     'SearchStrategy',
-    'CoarseToFineSearch',
-    'AdaptiveSearch',
+    'WideToNarrowSearch',
     'ResultsPlotter',
 ]

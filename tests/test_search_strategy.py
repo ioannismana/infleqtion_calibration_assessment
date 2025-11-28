@@ -4,15 +4,15 @@ Unit tests for search strategies.
 
 import unittest
 from unittest.mock import Mock
-from src.search_strategy import CoarseToFineSearch, SearchResult
+from src.search_strategy import WideToNarrowSearch, SearchResult
 
 
-class TestCoarseToFineSearch(unittest.TestCase):
-    """Test cases for CoarseToFineSearch."""
+class TestWideToNarrowSearch(unittest.TestCase):
+    """Test cases for WideToNarrowSearch."""
     
     def setUp(self):
         """Set up test fixtures."""
-        self.strategy = CoarseToFineSearch()
+        self.strategy = WideToNarrowSearch()
     
     def test_find_peak_in_results(self):
         """Test finding peak in measurement results."""

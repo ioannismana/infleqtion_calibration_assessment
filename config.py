@@ -19,13 +19,12 @@ class Config:
     ANGLE_PRECISION: float = 0.1  # Required precision (tenths of a degree)
     
     # Search strategy parameters
-    COARSE_SCAN_STEP: float = 20.0  # Initial wide scan step size
-    MEDIUM_SCAN_STEP: float = 4.0   # Medium resolution scan
-    FINE_SCAN_STEP: float = 1.0     # Fine scan around peak
+    WIDE_SCAN_STEP: float = 10.0  # Initial wide scan step size
+    NARROW_SCAN_STEP: float = 1.0     # Fine scan around peak
     REFINEMENT_STEP: float = 0.1    # Final refinement step
     
     # Search window sizes
-    MEDIUM_WINDOW: float = 30.0  # Degrees around coarse peak
+    MEDIUM_WINDOW: float = 30.0  # Degrees around wide peak
     FINE_WINDOW: float = 10.0    # Degrees around medium peak
     REFINEMENT_WINDOW: float = 2.0  # Degrees around fine peak
     
@@ -42,6 +41,6 @@ class Config:
     
     # Visualization
     PLOT_FILE_BASE_NAME: str = "calibration_results"
-    PLOT_OUTPUT_DIR: str = "results"
+    PLOT_OUTPUT_DIR: str = "plots"
     PLOT_DPI: int = 300
     FIGURE_SIZE: tuple[int, int] = (10, 6)

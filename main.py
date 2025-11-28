@@ -5,7 +5,7 @@ Entry point for the calibration application.
 import sys
 from src.api_client import MeasurementClient
 from src.calibration import CalibrationEngine, CalibrationResult
-from src.search_strategy import CoarseToFineSearch
+from src.search_strategy import WideToNarrowSearch
 from src.curve_fitting import GaussianFitter
 from src.scatter_plot import ResultsPlotter
 from config import Config
@@ -37,9 +37,8 @@ def main() -> int:
     """
     try:
         # Initialize components
-        print("Starting calibration ...")
         client = MeasurementClient(base_url=Config.SERVER_URL)
-        strategy = CoarseToFineSearch()
+        strategy = WideToNarrowSearch()
         fitter = GaussianFitter()
         engine = CalibrationEngine(client, strategy, fitter)
         
@@ -54,7 +53,7 @@ def main() -> int:
         print_results(result)
         
         # Generate visualization
-        print("\nGenerating visualization ...")
+        print("\nGenerating plot...")
         plotter = ResultsPlotter()
         plotter.plot_results(
             result,

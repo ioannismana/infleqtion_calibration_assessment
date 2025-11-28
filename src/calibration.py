@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import numpy as np
 from typing import List
 from src.api_client import MeasurementClient
-from src.search_strategy import SearchStrategy, CoarseToFineSearch
+from src.search_strategy import SearchStrategy, WideToNarrowSearch
 from src.curve_fitting import GaussianFitter, GaussianParams
 from config import Config
 
@@ -59,11 +59,11 @@ class CalibrationEngine:
         
         Args:
             client: MeasurementClient for taking measurements
-            strategy: Search strategy (defaults to CoarseToFineSearch)
+            strategy: Search strategy (defaults to WideToNarrowSearch)
             fitter: Gaussian fitter (defaults to GaussianFitter)
         """
         self.client = client
-        self.strategy = strategy or CoarseToFineSearch()
+        self.strategy = strategy or WideToNarrowSearch()
         self.fitter = fitter or GaussianFitter()
     
     def calibrate(self) -> CalibrationResult:
@@ -76,7 +76,7 @@ class CalibrationEngine:
         Raises:
             RuntimeError: If calibration fails
         """
-        print("Starting calibration ...")
+        print("Starting calibration...")
         
         # Check server connectivity
         print("\nCheck server connectivity...")
@@ -110,7 +110,7 @@ class CalibrationEngine:
         print(f"Optimal angle: {optimal_angle:.1f}°")
         
         # Take actual measurement at optimal angle for verification
-        print("\nStep 5: Verifying optimal angle...")
+        print("\nVerifying optimal angle...")
         measured_voltage = self.client.measure(optimal_angle)
         expected_voltage = self.fitter.predict(optimal_angle, fitted_params)
         print(f"Measured voltage: {measured_voltage:.2f}")
