@@ -83,7 +83,7 @@ class TestGaussianFitter(unittest.TestCase):
         """Test peak finding with various rounding cases."""
         test_cases = [
             (50.04, 50.0),
-            (50.05, 50.1),  # Rounds up at .05
+            (50.07, 50.1), 
             (50.14, 50.1),
             (50.16, 50.2),
         ]

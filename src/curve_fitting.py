@@ -78,7 +78,7 @@ class GaussianFitter:
         
         # Set bounds for parameters
         bounds = (
-            [Config.MIN_ANGLE, 1.0, 0.0, 0.0],  # Lower bounds
+            [Config.MIN_ANGLE, 1.0, -10.0, 0.0],  # Lower bounds
             [Config.MAX_ANGLE, 50.0, 50.0, 110.0]  # Upper bounds
         )
         
