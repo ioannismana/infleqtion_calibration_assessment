@@ -56,9 +56,13 @@ def main() -> int:
         # Generate visualization
         print("\nGenerating visualization ...")
         plotter = ResultsPlotter()
-        plotter.plot_results(result, filename=Config.PLOT_FILENAME)
+        plotter.plot_results(
+            result,
+            output_dir_name=Config.PLOT_OUTPUT_DIR,
+            file_base_name=Config.PLOT_FILE_BASE_NAME
+            )
         
-        print("\n✓ Calibration completed successfully!")
+        print("\nCalibration completed successfully")
         return 0
         
     except KeyboardInterrupt:

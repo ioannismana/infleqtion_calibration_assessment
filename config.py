@@ -41,6 +41,7 @@ class Config:
     MIN_DATA_POINTS_FOR_FIT: int = 10  # Minimum points needed for curve fitting
     
     # Visualization
-    PLOT_FILENAME: str = "calibration_results.png"
+    PLOT_FILE_BASE_NAME: str = "calibration_results"
+    PLOT_OUTPUT_DIR: str = "results"
     PLOT_DPI: int = 300
     FIGURE_SIZE: tuple[int, int] = (10, 6)

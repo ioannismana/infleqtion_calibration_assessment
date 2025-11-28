@@ -2,12 +2,12 @@
 Module for creating a scatter-plot of the calibration data points
 and the fitted Gaussian curve.
 """
+import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import numpy as np
-from typing import Optional
 from config import Config
+from datetime import datetime
 
 
 class ResultsPlotter:
@@ -16,7 +16,8 @@ class ResultsPlotter:
     @staticmethod
     def plot_results(
         result,
-        filename: str = Config.PLOT_FILENAME,
+        output_dir_name: str = Config.PLOT_OUTPUT_DIR,
+        file_base_name: str = Config.PLOT_FILE_BASE_NAME,
         show_plot: bool = False
     ) -> None:
         """
@@ -120,9 +121,14 @@ class ResultsPlotter:
         # Tight layout
         plt.tight_layout()
         
-        # Save the figure
-        plt.savefig(filename, dpi=Config.PLOT_DPI, bbox_inches='tight')
-        print(f"\n✓ Plot saved to: {filename}")
+        # Save the plot
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+
+        # Create output directory if it doesn't exist
+        os.makedirs(output_dir_name, exist_ok=True)
+        file_path = f"{output_dir_name}/{file_base_name}_{timestamp}.png"
+        plt.savefig(file_path, dpi=Config.PLOT_DPI, bbox_inches='tight')
+        print(f"\nPlot saved to: {file_path}")
         
         # Show plot if requested
         if show_plot:
