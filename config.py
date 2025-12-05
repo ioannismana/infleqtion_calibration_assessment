@@ -18,8 +18,8 @@ class Config:
     MAX_ANGLE: float = 360.0
     ANGLE_PRECISION: float = 0.1  # Required precision (tenths of a degree)
     
-    INITIAL_STEP = 10.0  # Starting step size in degrees
-    REDUCTION_FACTOR = 5.0  # Factor to reduce step and window by
+    INITIAL_STEP = 15.0  # Starting step size in degrees
+    REDUCTION_FACTOR = 10.0  # Factor to reduce step and window by
 
     # Measurement settings
     MEASUREMENTS_PER_ANGLE: int = 1  # Repeat measurements for averaging

@@ -102,56 +102,56 @@ class WideToNarrowSearch(SearchStrategy):
         max_angle, max_measurement = max(results, key=lambda x: x[1])
         return max_angle
     
-def search(self, client) -> SearchResult:
-    """
-    Execute an iterative search that progressively narrows.
-    
-    Args:
-        client: MeasurementClient instance
+    def search(self, client) -> SearchResult:
+        """
+        Execute an iterative search that progressively narrows.
         
-    Returns:
-        SearchResult with all measurements and estimated peak
-    """
-    print("Starting iterative search...")
-    
-    # Initial search parameters
-    current_start = Config.MIN_ANGLE
-    current_end = Config.MAX_ANGLE
-    current_step = Config.INITIAL_STEP  # e.g., 10
-    iteration = 1
-    current_peak = None
-    
-    # Continue until we reach desired precision
-    while current_step >= Config.ANGLE_PRECISION:
-        print(f"Iteration {iteration}: step size {current_step:.2f}°, "
-              f"range [{current_start:.1f}°, {current_end:.1f}°]")
+        Args:
+            client: MeasurementClient instance
+            
+        Returns:
+            SearchResult with all measurements and estimated peak
+        """
+        print("Starting iterative search...")
         
-        # Measure current range
-        results = self._measure_range(
-            client,
-            current_start,
-            current_end,
-            current_step
+        # Initial search parameters
+        current_start = Config.MIN_ANGLE
+        current_end = Config.MAX_ANGLE
+        current_step = Config.INITIAL_STEP  # e.g., 10
+        iteration = 1
+        current_peak = None
+        
+        # Continue until we reach desired precision
+        while current_step >= Config.ANGLE_PRECISION:
+            print(f"Iteration {iteration}: step size {current_step:.2f}°, "
+                f"range [{current_start:.1f}°, {current_end:.1f}°]")
+            
+            # Measure current range
+            results = self._measure_range(
+                client,
+                current_start,
+                current_end,
+                current_step
+            )
+            
+            # Find peak in current results
+            current_peak = self._find_peak_in_results(results)
+            print(f"  Peak found at: {current_peak:.1f}°")
+            
+            # Calculate new window around peak
+            window_size = (current_end - current_start) / Config.REDUCTION_FACTOR
+            current_start = max(Config.MIN_ANGLE, current_peak - window_size / 2)
+            current_end = min(Config.MAX_ANGLE, current_peak + window_size / 2)
+            
+            # Reduce step size
+            current_step = current_step / Config.REDUCTION_FACTOR
+            iteration += 1
+        
+        print(f"Final peak estimate: {current_peak:.1f}°")
+        
+        return SearchResult(
+            angles=self.angles,
+            measurements=self.measurements,
+            estimated_peak_angle=current_peak,
+            total_measurements=len(self.angles)
         )
-        
-        # Find peak in current results
-        current_peak = self._find_peak_in_results(results)
-        print(f"  Peak found at: {current_peak:.1f}°")
-        
-        # Calculate new window around peak
-        window_size = (current_end - current_start) / Config.REDUCTION_FACTOR
-        current_start = max(Config.MIN_ANGLE, current_peak - window_size / 2)
-        current_end = min(Config.MAX_ANGLE, current_peak + window_size / 2)
-        
-        # Reduce step size
-        current_step = current_step / Config.REDUCTION_FACTOR
-        iteration += 1
-    
-    print(f"Final peak estimate: {current_peak:.1f}°")
-    
-    return SearchResult(
-        angles=self.angles,
-        measurements=self.measurements,
-        estimated_peak_angle=current_peak,
-        total_measurements=len(self.angles)
-    )
