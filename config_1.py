@@ -18,9 +18,16 @@ class Config:
     MAX_ANGLE: float = 360.0
     ANGLE_PRECISION: float = 0.1  # Required precision (tenths of a degree)
     
-    INITIAL_STEP = 10.0  # Starting step size in degrees
-    REDUCTION_FACTOR = 5.0  # Factor to reduce step and window by
-
+    # Search strategy parameters
+    WIDE_SCAN_STEP: float = 10.0  # Initial wide scan step size
+    NARROW_SCAN_STEP: float = 1.0     # Fine scan around peak
+    REFINEMENT_STEP: float = 0.1    # Final refinement step
+    
+    # Search window sizes
+    MEDIUM_WINDOW: float = 30.0  # Degrees around wide peak
+    FINE_WINDOW: float = 10.0    # Degrees around medium peak
+    REFINEMENT_WINDOW: float = 2.0  # Degrees around fine peak
+    
     # Measurement settings
     MEASUREMENTS_PER_ANGLE: int = 1  # Repeat measurements for averaging
     
