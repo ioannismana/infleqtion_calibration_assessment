@@ -122,7 +122,7 @@ class WideToNarrowSearch(SearchStrategy):
         current_peak = None
         
         # Continue until we reach desired precision
-        while current_step >= Config.ANGLE_PRECISION:
+        while current_step > Config.ANGLE_PRECISION:
             print(f"Iteration {iteration}: step size {current_step:.2f}°, "
                 f"range [{current_start:.1f}°, {current_end:.1f}°]")
             
